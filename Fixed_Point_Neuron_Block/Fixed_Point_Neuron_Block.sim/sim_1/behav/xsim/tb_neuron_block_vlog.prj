@@ -1,0 +1,11 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  --include "C:/AMDDesignTools/2025.2/Vivado/data/rsb/busdef" \
+"../../../../Fixed_Point_Neuron_Block.srcs/sources_1/new/Fixed_Point_Multi.v" \
+"../../../../Fixed_Point_Neuron_Block.srcs/sources_1/new/neuron_block.v" \
+"../../../../Fixed_Point_Neuron_Block.srcs/sim_1/new/tb_neuron_block.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort
