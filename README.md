@@ -24,79 +24,43 @@ out multiplication = 3.0 -> 16'h0300
 
 Accumulator : 0.0 + 3.0 = 3.0-> 16'h0300
 
+<img width="756" height="275" alt="Image" src="https://github.com/user-attachments/assets/19dab66a-a074-4033-9bac-69beb05e3b7c" />
 
-### Gx Kernel
-```
--1  0  1
--2  0  2
--1  0  1
-```
+### Iterasi 2
+data input = 1.0 -> 16'h0100
 
-### Gy Kernel
-```
- 1  2  1
- 0  0  0
--1 -2 -1
-```
+weight = 1.0 -> 16'h0100
 
-Instead of computing:
+out multiplication = 1.0 -> 16'h0100
 
-sqrt(Gx² + Gy²)
+Accumulator : 3.0 + 1.0 = 4.0-> 16'h0400
 
-The hardware implementation uses:
+<img width="755" height="347" alt="Image" src="https://github.com/user-attachments/assets/bcd62d7a-bc2a-4c14-8826-3da89251117d" />
 
-|Gx| + |Gy|
+### Iterasi 3
+data input = 2.0 -> 16'h0200
 
-This avoids square-root hardware and reduces complexity.
+weight = -1.0 -> 16'hFF00
 
----
+out multiplication = -2.0 -> 16'FE00
 
-##  Architecture
+Accumulator : 0-> 16'h0000
 
-The design uses:
-
-- 3 Line Buffers
-- 3×3 Sliding Window Generator
-- Signed Gradient Computation
-- Clipping Logic (0–255)
-- Streaming Pipeline Structure
-
-### Data Flow
-
-1. Pixel input (1 pixel per clock)
-2. Line buffer storage
-3. 3×3 window formation
-4. Gx and Gy computation
-5. Magnitude calculation
-6. Output pixel generation
-
-Border pixels are set to zero.
+<img width="753" height="247" alt="Image" src="https://github.com/user-attachments/assets/6f9d5377-ef78-42a1-899f-275f68795810" />
 
 ---
 
 ##  File Structure
 
 ```
-sobel_stream.v         -> Sobel streaming core
-tb_sobel_stream.v      -> Simulation testbench
-test_gray_256.hex      -> Input grayscale image
-out_sobel.hex          -> Output edge-detected image
-hex_to_image.py        -> Converts HEX to PNG image
-```
-
----
-
-##  Simulation (Vivado)
-
-1. Add sobel_stream.v as Design Source
-2. Add tb_sobel_stream.v as Simulation Source
-3. Add test_gray_256.hex to sim_1
-4. Run Behavioral Simulation
-5. Generated output file: out_sobel.hex
-6. Convert HEX to image using:
-
-```
-python3 hex_to_image.py out_sobel.hex --width 256 --height 256 --out edge.png
+Fixed_Point_Multi.v         -> Perkalian fixed point Q8.8
+neuron_block.v         -> penjumlahan output perkalian fixed point dan logika ReLu
+tb_neuron_block.v      -> Simulation testbench
+tb_fixed_point_multi.v      -> Simulation testbench
+report_timing.rpt
+report_power.rpt
+report_area.rpt
+report_qor.rpt
 ```
 
 ---
@@ -108,19 +72,10 @@ python3 hex_to_image.py out_sobel.hex --width 256 --height 256 --out edge.png
 ✔ Streaming architecture  
 ✔ Real-time capable  
 
-Future extensions:
-- VGA display output
-- Camera sensor integration
-- Real-time edge visualization
-
----
-
 ##  Tools Used
 
 - Verilog HDL
 - Xilinx Vivado
-- Python (for image reconstruction)
-- FPGA-based digital design flow
 
 ---
 
@@ -136,5 +91,3 @@ Future extensions:
 
 ##  Author
 
-Final-year Electrical & Electronic Engineering Undergraduate  
-Interested in FPGA Design, Digital Systems, and Hardware Acceleration
